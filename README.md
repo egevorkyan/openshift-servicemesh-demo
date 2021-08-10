@@ -24,6 +24,8 @@ oc apply -n <YOUR_PROJECT_FROM_MEMBER_LIST> -f app-mtls-gateway-virtual-service/
 ```
 >Note: You can apply all manifests together just simply use -
 
+5. Prepare deployment manifest of your application with sidecars(EnvoyProxies), do not forget to assign versioning label.
+
 ><b>Info:</b> Please note that Istio provides more features, which are not shown here,
 > let me know about particular feature, and I will prepare demo manifest and use case.
 > 
