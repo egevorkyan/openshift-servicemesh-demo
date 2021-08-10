@@ -1,0 +1,78 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: demo1-registry-gateway
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+    - port:
+        number: 443
+        name: https
+        protocol: HTTPS
+      tls:
+        mode: SIMPLE
+        privateKey: /etc/istio/ingressgateway-certs/tls.key
+        serverCertificate: /etc/istio/ingressgateway-certs/tls.crt
+      hosts:
+        - "demo1.apps.cl001.openshiftdev.com"
+
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: demo1-registry-virtual-service
+spec:
+  hosts:
+    - "demo1.apps.cl001.openshiftdev.com"
+  gateways:
+    - demo1-registry-gateway
+  http:
+    - match:
+        - uri:
+            prefix: /
+      route:
+        - destination:
+            host: demo1
+            port:
+              number: 8082
+
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: demo2-gateway
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+    - port:
+        number: 443
+        name: https
+        protocol: HTTPS
+      tls:
+        mode: SIMPLE
+        privateKey: /etc/istio/ingressgateway-certs/tls.key
+        serverCertificate: /etc/istio/ingressgateway-certs/tls.crt
+      hosts:
+        - "demo2.apps.cl001.openshiftdev.com"
+
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: demo2-virtual-service
+spec:
+  hosts:
+    - "demo2.apps.cl001.openshiftdev.com"
+  gateways:
+    - demo2-gateway
+  http:
+    - match:
+        - uri:
+            prefix: /
+      route:
+        - destination:
+            host: demo2
+            port:
+              number: 8081
